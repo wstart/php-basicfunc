@@ -242,4 +242,35 @@ function getrandstring($length, $hasnum = false)
     return $str;
 }
 
+
+/**
+ * 发包函数
+ * @param $url 地址
+ * @param $data 参数
+ * @param $type string 发送数据类型
+ * @return string
+ */
+function request_func($url,$data,$type="json")
+{
+
+    if($type=="json"){
+        $data = json_encode($data);
+    }else {
+        $data = http_build_query($data);
+    }
+
+    $opts = array(
+        'http' => array(
+            'method' => "POST",
+            'header' => "Content-length:" . strlen($data) . "\r\n" .
+                "\r\n",
+            'content' => $data,
+        )
+    );
+    $cxContext = stream_context_create($opts);
+    $sFile = file_get_contents($url, false, $cxContext);
+
+    return   $sFile;
+
+}
 ?>
