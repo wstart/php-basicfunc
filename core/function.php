@@ -1,5 +1,9 @@
 <?php
 
+
+if (!defined('php_basic')){
+    die('no promistion to visited');
+}
 /**
  * 头部 跳转函数
  *

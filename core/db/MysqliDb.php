@@ -13,6 +13,9 @@
  * @version   2.9-master
  */
 
+if (!defined('php_basic')){
+    die('no promistion to visited');
+}
 class MysqliDb
 {
 

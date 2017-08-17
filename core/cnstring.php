@@ -6,6 +6,9 @@
  * Time: 上午11:47
  */
 
+if (!defined('php_basic')){
+    die('no promistion to visited');
+}
 
 /**
  * 中文字符串切割

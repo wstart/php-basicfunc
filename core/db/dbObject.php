@@ -1,4 +1,8 @@
 <?php
+
+if (!defined('php_basic')){
+    die('no promistion to visited');
+}
 /**
  * Mysqli Model wrapper
  *

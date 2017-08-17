@@ -6,6 +6,9 @@
  * Time: 上午11:20
  */
 
+if (!defined('php_basic')){
+    die('no promistion to visited');
+}
 /**
  * 返回域名部分
  * @param $host
