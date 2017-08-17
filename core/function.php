@@ -13,7 +13,6 @@ function header_location($url = 'index.php')
 }
 
 
-
 /**
  * 头部 判断是否是移动手机
  *
@@ -61,47 +60,46 @@ function addslashes_deep($value)
  * @param $uckey 自定义函数
  * @return csrf_token
  */
-function csrf_token($uckey='')
+function csrf_token($uckey = '')
 {
     return substr(md5(substr(time(), 0, -7) . session_id() . $uckey), 8, 8);
 }
 
 /**
- * 返回csrftoken
- *
- * @param $uckey 自定义函数
- * @return csrf_token
+ * 判断密码复杂度是否足够
+ * @param $password
+ * @param int $strongpw 0  没任何要求 1 包含数字 2 包含小写 3 包含大写 4 包含特殊符号
+ * @param int $length
+ * @return  string '' 通过  不为空则 显示具体信息
  */
-function check_strongpw($password)
+function check_strongpw($password, $strongpw = 1, $length = 6)
 {
-    $conn = db::getInstance();
-    $list = $conn->select('Settings', array(), array("strongpw"), 0, 1);
-    if (!empty($list)) {
-        extract($list[0]);
-        $result = True;
-        $msg = "";
-        if ($strongpw != "") {
-            if (strstr($strongpw, "1")) {
-                $result = preg_match('/[0-9]+/', $password) && $result;
-                $msg .= "数字、";
-            }
-            if (strstr($strongpw, "2")) {
-                $result = preg_match('/[a-z]+/', $password) && $result;
-                $msg .= "小写字母、";
-            }
-            if (strstr($strongpw, "3")) {
-                $result = preg_match('/[A-Z]+/', $password) && $result;
-                $msg .= "大写字母、";
-            }
-            if (strstr($strongpw, "4")) {
-                $result = preg_match('/[[:punct:]]+/', $password) && $result;
-                $msg .= "特殊符号、";
-            }
-            if (!$result) {
-                return trim($msg, "、");
-            }
-        }
+    if (strlen($password) < $length) {
+        return "密码长度不够";
     }
+
+    $msg = '密码必须包含：';
+    if ($strongpw >= 1) {
+        $result = preg_match('/[0-9]+/', $password) && $result;
+        $msg .= "数字、";
+    }
+    if ($strongpw >= 2) {
+        $result = preg_match('/[a-z]+/', $password) && $result;
+        $msg .= "小写字母、";
+    }
+    if ($strongpw >= 3) {
+        $result = preg_match('/[A-Z]+/', $password) && $result;
+        $msg .= "大写字母、";
+    }
+    if ($strongpw >= 4) {
+        $result = preg_match('/[[:punct:]]+/', $password) && $result;
+        $msg .= "特殊符号、";
+    }
+    if (!$result) {
+        return trim($msg, "、");
+    }
+
+
     return "";
 }
 
@@ -161,7 +159,8 @@ function uc_authcode($string, $operation = 'DECODE', $key = '', $expiry = 0)
 
     if ($operation == 'DECODE') {
         if ((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0)
-            && substr($result, 10, 16) == substr(md5(substr($result, 26) . $keyb), 0, 16)) {
+            && substr($result, 10, 16) == substr(md5(substr($result, 26) . $keyb), 0, 16)
+        ) {
             return substr($result, 26);
         } else {
             return '';
@@ -225,7 +224,7 @@ function isValidCond($expstr)
  * @param  $hasnum bool  是否需要包含数字
  * @return string
  */
-function getrandstring($length,$hasnum=false)
+function getrandstring($length, $hasnum = false)
 {
     $str = '';
     $length = intval($length);
@@ -233,10 +232,10 @@ function getrandstring($length,$hasnum=false)
         $length = 1;
     }
     for ($i = 0; $i <= $length; $i++) {
-        if($hasnum) {
+        if ($hasnum) {
             $rchr = mt_rand(0, 1) == 1 ? mt_rand(ord('a'), ord('z')) : mt_rand(ord('0'), ord('9'));
-        }else{
-            $rchr =  mt_rand(ord('a'), ord('z'));
+        } else {
+            $rchr = mt_rand(ord('a'), ord('z'));
         }
         $str .= chr($rchr);
     }
