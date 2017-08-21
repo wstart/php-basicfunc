@@ -1,7 +1,7 @@
 <?php
 
 
-if (!defined('php_basic')){
+if (!defined('php_basic')) {
     die('no promistion to visited');
 }
 /**
@@ -39,6 +39,70 @@ function header_ismobile()
         }
     }
     return $is_mobile;
+}
+
+
+/**
+ * 配置文件写入格式化
+ * @param $value
+ * @return float|int|string
+ */
+function config_encode($value)
+{
+    if ($value == '1' || $value === true) {
+        return 1;
+    } elseif ($value == '0' || $value === false) {
+        return 0;
+    } elseif ($value == '') {
+        return '""';
+    }
+    if (is_numeric($value)) {
+        $value = $value * 1;
+        if (is_int($value)) {
+            return (int)$value;
+        } elseif (is_float($value)) {
+            return (float)$value;
+        }
+    } // @codeCoverageIgnore
+    return '"' . $value . '"';
+}
+
+/**
+ * 写入配置文件
+ * @param  $$data_array  config_read 读取出来的数据
+ */
+function config_write($data_array)
+{
+    $file_content = "";
+    foreach ($data_array as $key_1 => $groupe) {
+        $file_content .= "\n[" . $key_1 . "]\n";
+        foreach ($groupe as $key_2 => $value_2) {
+            if (is_array($value_2)) {
+                foreach ($value_2 as $key_3 => $value_3) {
+                    $file_content .= $key_2 . '[' . $key_3 . '] = ' . config_encode($value_3) . "\n";
+                }
+            } else {
+                $file_content .= $key_2 . ' = ' . config_encode($value_2) . "\n";
+            }
+        }
+    }
+    $file_content = preg_replace('#^\n#', '', $file_content);
+    file_put_contents(CONFIG_PATH, $file_content);
+
+}
+
+/**
+ * 读取配置文件地址
+ * @param $path
+ * @return array
+ */
+function config_read()
+{
+    if (!file_exists(CONFIG_PATH)) {
+        config_write(array("CONFIGNOTE" => array('key'=>'value')));
+    }
+    return parse_ini_file(CONFIG_PATH, true);
+
 }
 
 
@@ -254,12 +318,12 @@ function getrandstring($length, $hasnum = false)
  * @param $type string 发送数据类型
  * @return string
  */
-function request_func($url,$data,$type="json")
+function request_func($url, $data, $type = "json")
 {
 
-    if($type=="json"){
+    if ($type == "json") {
         $data = json_encode($data);
-    }else {
+    } else {
         $data = http_build_query($data);
     }
 
@@ -274,7 +338,8 @@ function request_func($url,$data,$type="json")
     $cxContext = stream_context_create($opts);
     $sFile = file_get_contents($url, false, $cxContext);
 
-    return   $sFile;
+    return $sFile;
 
 }
+
 ?>

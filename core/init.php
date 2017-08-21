@@ -37,11 +37,12 @@ define('PHPSELF',$php_self);
 //完整url
 define('CRURL',$crurl);
 
-var_dump($php_self);
-var_dump($crurl);
+//定义配置文件地址
+define('CONFIG_PATH',ROOT_DIR.'/config.ini');
 
-include ('./function.php');
-include ('./db/MysqliDb.php');
+
+include (ROOT_DIR.'/function.php');
+include (ROOT_DIR.'/db/MysqliDb.php');
 
 
 
