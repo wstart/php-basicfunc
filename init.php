@@ -10,7 +10,7 @@
 define('php_basic','0.1');
 
 //是否开启调试
-define('DEBUG',false);
+define('DEBUG',true);
 
 //错误提示
 error_reporting(7);
@@ -37,12 +37,20 @@ define('PHPSELF',$php_self);
 //完整url
 define('CRURL',$crurl);
 
-//定义配置文件地址
+//配置文件路径
 define('CONFIG_PATH',ROOT_DIR.'/config.ini');
 
+//控制器路径
+define("CPATH", ROOT_DIR.'/control') ;
 
-include (ROOT_DIR.'/function.php');
-include (ROOT_DIR.'/db/MysqliDb.php');
+//模型路径
+define("MPATH",ROOT_DIR.'/model') ;
+
+include (ROOT_DIR.'/core/function.php');
+include (ROOT_DIR.'/core/validator.php');
+include (ROOT_DIR.'/control/supercontrol.php');
+include (ROOT_DIR.'/core/db/MysqliDb.php');
+include (ROOT_DIR.'/core/output.php');
 
 
 

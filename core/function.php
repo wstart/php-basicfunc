@@ -4,6 +4,48 @@
 if (!defined('php_basic')) {
     die('no promistion to visited');
 }
+
+
+/**
+ * 标准输出头设置
+ */
+function stanHeader(){
+    session_start();
+    header("Content-Type:text/html; charset=utf-8");
+}
+
+/**
+ * 获取一个值 为空则返回默认值
+ * @param $v
+ * @param null $defalut
+ * @return array|null|string
+ */
+function getVaule($v, $defalut = null)
+{
+    if ($v == null) {
+        $v = '';
+    }
+
+    if (is_array($v)) {
+        if ($defalut == null) {
+            $defalut = array();
+        }
+        if (empty($v)) {
+            return $defalut;
+        }
+    } else {
+        $v = trim($v);
+        if ($defalut == null) {
+            $defalut = '';
+        }
+        if ($v == '') {
+            return $defalut;
+        }
+    }
+    return $v;
+}
+
+
 /**
  * 头部 跳转函数
  *
@@ -99,7 +141,7 @@ function config_write($data_array)
 function config_read()
 {
     if (!file_exists(CONFIG_PATH)) {
-        config_write(array("CONFIGNOTE" => array('key'=>'value')));
+        config_write(array("CONFIGNOTE" => array('key' => 'value')));
     }
     return parse_ini_file(CONFIG_PATH, true);
 
